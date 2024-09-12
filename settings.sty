@@ -1,6 +1,7 @@
 \RequirePackage[a-1b]{pdfx}
 \pdfmajorversion=1
 \pdfminorversion=3
+
 \RequirePackage{silence}
 \RequirePackage{shellesc}
 \WarningsOff[longtable]
@@ -20,14 +21,16 @@
 
 \RequirePackage{graphicx}
 %\RequirePackage[hyphens]{url}
-%\RequirePackage{babel}
+%\RequirePackage[english]{babel}
+
 \raggedright
 
 \RequirePackage[fixed]{fontawesome5}
 
 \newcommand{\smallcaps}[1]{\textsc{\lowercase{#1}}}
 
-\RequirePackage[a4paper,nohead,nofoot,hmargin=2cm,vmargin=0.5cm]{geometry}
+
+\RequirePackage[nohead,nofoot]{geometry}
 \RequirePackage{relsize}
 \RequirePackage[dvipsnames,svgnames]{xcolor}
 \RequirePackage{tikz}
@@ -38,7 +41,8 @@
 \definecolor{MarkerColour}{HTML}{B6073F}
 
 \RequirePackage{cmap}
-\RequirePackage[final]{microtype}
+
+%\RequirePackage[final]{microtype}
 
 % If you're not a researcher nor an academic, you probably don't need biblatex; delete this line.
 %\RequirePackage[bibstyle=apa6,sorting=ymdnt,uniquename=init,defernumbers=true]{biblatex}

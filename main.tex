@@ -1,6 +1,7 @@
-\documentclass[a4paper,12pt,english,final]{curve}
+\documentclass[a4paper,11pt,english,final]{curve}
 
 \usepackage{settings}
+
 
 \ifx\conditionmacro\undefined
   \ShellEscape{%
@@ -45,7 +46,7 @@
 \myname{Hinrichs}{Jeppe}
 
 % Change the page margins if you want
-\geometry{left=1cm,right=1cm,top=1cm,bottom=1cm}
+\geometry{left=1cm,right=1cm,top=1cm,bottom=0.5cm}
 
 % Change the colours if you want
 \definecolor{SwishLineColour}{HTML}{000000}
@@ -66,15 +67,14 @@
 
 \title{Curriculum Vitae}
 
+\newcommand{\description}{}
+\usepackage[extreme]{savetrees}
+
 \begin{document}
-%\maketitle[c]
-%\makeheaders[c]
-%\prefix{}
 
 \begin{center}
-    \vspace{-15pt}
-    {\Huge \scshape Jeppe Hinrichs} \\ %\vspace{1pt}
-    Copenhagen, Denmark \\ \vspace{1pt}
+    {\LARGE \scshape Jeppe Hinrichs} \\
+    Copenhagen, Denmark \\
     \small \href{tel:+4581403148}{ \raisebox{-0.1\height}\faPhone\ \underline{(+45) 81403148} ~} \href{mailto:dem16216syh@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{dem16216syh@gmail.com}} ~ 
     \href{https://linkedin.com/in/jeppe-h-1710a6a6}{\raisebox{-0.2\height}\faLinkedin\ \underline{jeppe-h-1710a6a6}}  ~
     \href{https://github.com/s163555}{\raisebox{-0.2\height}\faGithub\ \underline{s163555}} ~
