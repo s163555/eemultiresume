@@ -1,8 +1,6 @@
-\NeedsTeXFormat{LaTeX2e} % Use LuaLatex!
-\documentclass[a4paper,skipsamekey,12pt,english,final]{curve}
+\documentclass[a4paper,12pt,english,final]{curve}
 
-\input{setup.tex}
-\input{contact.tex}
+\usepackage{settings}
 
 \ifx\conditionmacro\undefined
   \ShellEscape{%
@@ -10,62 +8,87 @@
     "\gdef\string\conditionmacro{1}\string\input\space\jobname"
   }%
   \ShellEscape{%
-    lualatex --jobname="output/cv-ic"
+    lualatex --jobname="output/cv-sw"
     "\gdef\string\conditionmacro{2}\string\input\space\jobname"
+  }%
+  \ShellEscape{%
+    lualatex --jobname="output/cv-ic"
+    "\gdef\string\conditionmacro{3}\string\input\space\jobname"
   }%
   %\ShellEscape{%
   %  lualatex --jobname="cv-test"
   %  "\gdef\string\conditionmacro{3}\string\input\space\jobname"
   %}%
-  %\ShellEscape{%
-  %  lualatex --jobname="cv-sw"
-  %  "\gdef\string\conditionmacro{3}\string\input\space\jobname"
-  %}%
   \expandafter\stop
 \fi
 
+% Change the fonts if you want
+\ifxetexorluatex % If you're using XeLaTeX or LuaLaTeX
+  %% You can use \setmainfont etc; I'm just using these font packages here because they provide OpenType fonts for use by XeLaTeX/LuaLaTeX anyway
+  \usepackage[T1]{fontenc}
+  \usepackage{mlmodern}
+  %\usepackage{fontspec} 
+  %\usepackage[p,osf,swashQ]{cochineal}
+  %\usepackage[medium,bold]{cabin}
+  %\usepackage[varqu,varl,scale=0.9]{zi4}
+\else % If you're using pdfLaTeX or latex
+  \usepackage[T1]{fontenc}
+  \usepackage[p,osf,swashQ]{cochineal}
+  \usepackage{cabin}
+  \usepackage[varqu,varl,scale=0.9]{zi4}
+\fi
+
+%% Only needed if you want a Publication List
+%\addbibresource{own-bib.bib}
+
+%% Specify your last name and first name (as given in the .bib) to automatically bold your own name in the publications list. One caveat: You need to write \bibnamedelima where there's a space in your name for this to work properly for now...
+\myname{Hinrichs}{Jeppe}
+
+% Change the page margins if you want
+\geometry{left=1cm,right=1cm,top=1cm,bottom=1cm}
+
+% Change the colours if you want
+\definecolor{SwishLineColour}{HTML}{000000}
+\definecolor{MarkerColour}{HTML}{000000}
+
+% Change the item prefix marker if you want
+% \prefixmarker{$\diamond$}
+
+%% Photo is only shown if "fullonly" is included
+%\includecomment{fullonly}
+\excludecomment{fullonly}
+
 \ifnum\conditionmacro=1 \flavor{hw} \fi
-\ifnum\conditionmacro=2 \flavor{ic} \fi
-%\ifnum\conditionmacro=3 \includeonly{personal,contact,test/content}\fi
+\ifnum\conditionmacro=2 \flavor{sw} \fi
+\ifnum\conditionmacro=3 \flavor{ic} \fi
 %\ifnum\conditionmacro=4 \includeonly{personal,contact,sw/content}\fi
 
-\begin{document} 
+
+\title{Curriculum Vitae}
+
+\begin{document}
+%\maketitle[c]
+%\makeheaders[c]
+%\prefix{}
 
 \begin{center}
-    %\vspace{-1pt}
-    {\Huge \scshape \name} \\ %\vspace{1pt}
-    \location \\ \vspace{1pt}
-    \small \href{tel:\tel}{ \raisebox{-0.1\height}\faPhone\ \underline{\tel} ~} \href{mailto:\email}{\raisebox{-0.2\height}\faEnvelope\  \underline{\email}} ~ 
-    \href{http://linkedin.com/in/\linkedin}{\raisebox{-0.2\height}\faLinkedin\ \underline{\linkedin}}  ~
-    \href{http://github.com/\github}{\raisebox{-0.2\height}\faGithub\ \underline{\github}} ~
-    \vspace{-8pt}
+    \vspace{-15pt}
+    {\Huge \scshape Jeppe Hinrichs} \\ %\vspace{1pt}
+    Copenhagen, Denmark \\ \vspace{1pt}
+    \small \href{tel:+4581403148}{ \raisebox{-0.1\height}\faPhone\ \underline{(+45) 81403148} ~} \href{mailto:dem16216syh@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{dem16216syh@gmail.com}} ~ 
+    \href{https://linkedin.com/in/jeppe-h-1710a6a6}{\raisebox{-0.2\height}\faLinkedin\ \underline{jeppe-h-1710a6a6}}  ~
+    \href{https://github.com/s163555}{\raisebox{-0.2\height}\faGithub\ \underline{s163555}} ~
+    \vspace{-5pt}
 \end{center}
 
-\makerubric{experience}
-%\makerubric{education}
-%\makerubric{skills}
+\makerubric{employment}
+\makerubric{education}
 
-\section{EDUCATION}
-  \resumeSubHeadingListStart
-    \resumeSubheadingEdu
-      {Korea Advanced Institute of Science and Technology}{August 2021 -- August 2023}
-      {Master of Science in Electrical Engineering}{Daejeon, South Korea}{}
-      %{Biomedical Devices, MEMS, Real-Time Operating Systems}
-  \resumeSubHeadingListEnd
-  \vspace{-15pt}
-    \resumeSubHeadingListStart
-   \resumeSubheadingEdu
-     {Technical University of Denmark}{February 2018 -- June 2023}
-     {Master of Science in Electrical Engineering}{Copenhagen, Denmark}
-      {Switched-Mode Systems, Machine Learning, Organizational Management}
-  \resumeSubHeadingListEnd
-\vspace{-15pt}
-  \resumeSubHeadingListStart
-    \resumeSubheadingEdu
-      {Tokyo Institute of Technology}{March 2020 -- August 2020}
-      {Research Student, Academic Exchange}{Tokyo, Japan}
-      {Design Thinking, Semiconductor Physics, VLSI Technology}
-  \resumeSubHeadingListEnd
-  \vspace{-15pt}
+\makerubric{projects}
+\makerubric{skills}
+\makerubric{misc}
+
+%\makerubric{referee}
+% \input{referee-full}
 
 \end{document}
