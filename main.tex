@@ -53,7 +53,7 @@
 \definecolor{MarkerColour}{HTML}{000000}
 
 % Change the item prefix marker if you want
-% \prefixmarker{$\diamond$}
+%\prefixmarker{$\diamond$}
 
 %% Photo is only shown if "fullonly" is included
 %\includecomment{fullonly}
@@ -69,6 +69,26 @@
 
 \newcommand{\description}{}
 \usepackage[extreme]{savetrees}
+
+% Define dynamic adjustments
+\newlength{\myresumeheight}
+\newlength{\targetheight}
+\setlength{\targetheight}{\textheight} % Set the target to one page
+
+\newcommand{\dynamicspacing}{ % Renamed to avoid conflict
+    \ifdim\myresumeheight<0.8\targetheight
+        \linespread{1.2} % For lighter content, increase line spacing
+    \fi
+    \ifdim\myresumeheight>0.95\targetheight
+        \linespread{0.9} % For dense content, reduce line spacing
+        \setlength{\parskip}{0pt} % Reduce paragraph spacing
+    \fi
+}
+
+\AtEndDocument{
+    \setlength{\myresumeheight}{\pagetotal}
+    \dynamicspacing % Call the renamed function
+}
 
 \begin{document}
 
