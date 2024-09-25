@@ -1,0 +1,3 @@
+ToDo:
+-- Check PDF/A compliance levels a-2b vs a-2u?
+-- PDF metadata integration (XMP?)
