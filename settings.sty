@@ -19,6 +19,33 @@
   \fi
 \fi
 
+% Shell escapes define outputs
+\ifx\conditionmacro\undefined
+  \ShellEscape{%
+    lualatex --jobname="output/cv-hw"
+    "\gdef\string\conditionmacro{1}\string\input\space\jobname"
+  }%
+  \ShellEscape{%
+    lualatex --jobname="output/cv-sw"
+    "\gdef\string\conditionmacro{2}\string\input\space\jobname"
+  }%
+  \ShellEscape{%
+    lualatex --jobname="output/cv-ic"
+    "\gdef\string\conditionmacro{3}\string\input\space\jobname"
+  }%
+  %\ShellEscape{%
+  %  lualatex --jobname="cv-test"
+  %  "\gdef\string\conditionmacro{3}\string\input\space\jobname"
+  %}%
+  \expandafter\stop
+\fi
+
+\ifnum\conditionmacro=1 \flavor{hw} \fi
+\ifnum\conditionmacro=2 \flavor{sw} \fi
+\ifnum\conditionmacro=3 \flavor{ic} \fi
+% \ifnum\conditionmacro=4 \flavor{test} \fi
+
+
 \RequirePackage{graphicx}
 %\RequirePackage[hyphens]{url}
 %\RequirePackage[english]{babel}
@@ -186,3 +213,42 @@
   \gdef\@nextentry{\\\par}\@key{#1}\egroup
   \@@key & \prefixmarker{#2}\@prefix &}
 \makeatother
+
+% Change the fonts if you want
+\ifxetexorluatex % If you're using XeLaTeX or LuaLaTeX
+  %% You can use \setmainfont etc; I'm just using these font packages here because they provide OpenType fonts for use by XeLaTeX/LuaLaTeX anyway
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage{mlmodern}
+  %\RequirePackage{fontspec} 
+  %\RequirePackage[p,osf,swashQ]{cochineal}
+  %\RequirePackage[medium,bold]{cabin}
+  %\RequirePackage[varqu,varl,scale=0.9]{zi4}
+\else % If you're using pdfLaTeX or latex
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[p,osf,swashQ]{cochineal}
+  \RequirePackage{cabin}
+  \RequirePackage[varqu,varl,scale=0.9]{zi4}
+\fi
+
+% Define dynamic adjustments
+\newcommand{\description}{}
+\RequirePackage[extreme]{savetrees}
+
+\newlength{\myresumeheight}
+\newlength{\targetheight}
+\setlength{\targetheight}{\textheight} % Set the target to one page
+
+\newcommand{\dynamicspacing}{ % Renamed to avoid conflict
+    \ifdim\myresumeheight<0.8\targetheight
+        \linespread{1.2} % For lighter content, increase line spacing
+    \fi
+    \ifdim\myresumeheight>0.95\targetheight
+        \linespread{0.9} % For dense content, reduce line spacing
+        \setlength{\parskip}{0pt} % Reduce paragraph spacing
+    \fi
+}
+
+\AtEndDocument{
+    \setlength{\myresumeheight}{\pagetotal}
+    \dynamicspacing % Call the renamed function
+}

@@ -2,43 +2,6 @@
 
 \usepackage{settings}
 
-
-\ifx\conditionmacro\undefined
-  \ShellEscape{%
-    lualatex --jobname="output/cv-hw"
-    "\gdef\string\conditionmacro{1}\string\input\space\jobname"
-  }%
-  \ShellEscape{%
-    lualatex --jobname="output/cv-sw"
-    "\gdef\string\conditionmacro{2}\string\input\space\jobname"
-  }%
-  \ShellEscape{%
-    lualatex --jobname="output/cv-ic"
-    "\gdef\string\conditionmacro{3}\string\input\space\jobname"
-  }%
-  %\ShellEscape{%
-  %  lualatex --jobname="cv-test"
-  %  "\gdef\string\conditionmacro{3}\string\input\space\jobname"
-  %}%
-  \expandafter\stop
-\fi
-
-% Change the fonts if you want
-\ifxetexorluatex % If you're using XeLaTeX or LuaLaTeX
-  %% You can use \setmainfont etc; I'm just using these font packages here because they provide OpenType fonts for use by XeLaTeX/LuaLaTeX anyway
-  \usepackage[T1]{fontenc}
-  \usepackage{mlmodern}
-  %\usepackage{fontspec} 
-  %\usepackage[p,osf,swashQ]{cochineal}
-  %\usepackage[medium,bold]{cabin}
-  %\usepackage[varqu,varl,scale=0.9]{zi4}
-\else % If you're using pdfLaTeX or latex
-  \usepackage[T1]{fontenc}
-  \usepackage[p,osf,swashQ]{cochineal}
-  \usepackage{cabin}
-  \usepackage[varqu,varl,scale=0.9]{zi4}
-\fi
-
 %% Only needed if you want a Publication List
 %\addbibresource{own-bib.bib}
 
@@ -59,36 +22,7 @@
 %\includecomment{fullonly}
 \excludecomment{fullonly}
 
-\ifnum\conditionmacro=1 \flavor{hw} \fi
-\ifnum\conditionmacro=2 \flavor{sw} \fi
-\ifnum\conditionmacro=3 \flavor{ic} \fi
-%\ifnum\conditionmacro=4 \includeonly{personal,contact,sw/content}\fi
-
-
 \title{Curriculum Vitae}
-
-\newcommand{\description}{}
-\usepackage[extreme]{savetrees}
-
-% Define dynamic adjustments
-\newlength{\myresumeheight}
-\newlength{\targetheight}
-\setlength{\targetheight}{\textheight} % Set the target to one page
-
-\newcommand{\dynamicspacing}{ % Renamed to avoid conflict
-    \ifdim\myresumeheight<0.8\targetheight
-        \linespread{1.2} % For lighter content, increase line spacing
-    \fi
-    \ifdim\myresumeheight>0.95\targetheight
-        \linespread{0.9} % For dense content, reduce line spacing
-        \setlength{\parskip}{0pt} % Reduce paragraph spacing
-    \fi
-}
-
-\AtEndDocument{
-    \setlength{\myresumeheight}{\pagetotal}
-    \dynamicspacing % Call the renamed function
-}
 
 \begin{document}
 
