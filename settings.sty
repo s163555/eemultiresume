@@ -27,6 +27,12 @@
   \fi
 \fi
 
+\ifnum\conditionmacro=1 \flavor{hw} \fi
+\ifnum\conditionmacro=2 \flavor{sw} \fi
+\ifnum\conditionmacro=3 \flavor{ic} \fi
+% \ifnum\conditionmacro=4 \flavor{test} \fi
+
+
 \RequirePackage{graphicx}
 %\RequirePackage[hyphens]{url}
 %\RequirePackage[english]{babel}
@@ -39,6 +45,7 @@
 
 
 \RequirePackage[nohead,nofoot]{geometry}
+\RequirePackage{bookmark}
 \RequirePackage{relsize}
 \RequirePackage[dvipsnames,svgnames]{xcolor}
 \RequirePackage{tikz}
