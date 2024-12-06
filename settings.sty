@@ -27,33 +27,6 @@
   \fi
 \fi
 
-% Shell escapes define outputs
-\ifx\conditionmacro\undefined
-  \ShellEscape{%
-    lualatex --jobname="output/cv-hw"
-    "\gdef\string\conditionmacro{1}\string\input\space\jobname"
-  }%
-  \ShellEscape{%
-    lualatex --jobname="output/cv-sw"
-    "\gdef\string\conditionmacro{2}\string\input\space\jobname"
-  }%
-  \ShellEscape{%
-    lualatex --jobname="output/cv-ic"
-    "\gdef\string\conditionmacro{3}\string\input\space\jobname"
-  }%
-  %\ShellEscape{%
-  %  lualatex --jobname="cv-test"
-  %  "\gdef\string\conditionmacro{3}\string\input\space\jobname"
-  %}%
-  \expandafter\stop
-\fi
-
-\ifnum\conditionmacro=1 \flavor{hw} \fi
-\ifnum\conditionmacro=2 \flavor{sw} \fi
-\ifnum\conditionmacro=3 \flavor{ic} \fi
-% \ifnum\conditionmacro=4 \flavor{test} \fi
-
-
 \RequirePackage{graphicx}
 %\RequirePackage[hyphens]{url}
 %\RequirePackage[english]{babel}
