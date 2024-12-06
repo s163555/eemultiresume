@@ -1,18 +1,28 @@
 \documentclass[a4paper,11pt,english,final,hidelinks]{curve}
 
+% Contact info here
+\newcommand{\firstname}{Jeppe}
+\newcommand{\lastname}{Hinrichs}
+\newcommand{\address}{Copenhagen, Denmark}
+\newcommand{\phoneno}{+4581403148}
+\newcommand{\phonenoprint}{(+45) 81403148}
+\newcommand{\email}{dem16216syh@gmail.com}
+\newcommand{\linkedin}{jeppe-h-1710a6a6}
+\newcommand{\github}{s163555}
+
 \usepackage{settings}
 
 %% Only needed if you want a Publication List
 %\addbibresource{own-bib.bib}
 
 %% Specify your last name and first name (as given in the .bib) to automatically bold your own name in the publications list. One caveat: You need to write \bibnamedelima where there's a space in your name for this to work properly for now...
-\myname{Hinrichs}{Jeppe}
+\myname{\lastname}{\firstname}
 
 % Change the page margins if you want
 \geometry{left=1cm,right=1cm,top=1cm,bottom=0.5cm}
 
 % Change the colours if you want
-\definecolor{SwishLineColour}{HTML}{000000}
+%\definecolor{SwishLineColour}{HTML}{000000}
 \definecolor{MarkerColour}{HTML}{000000}
 
 % Change the item prefix marker if you want
@@ -27,11 +37,11 @@
 \begin{document}
 
 \begin{center}
-    {\LARGE \scshape Jeppe Hinrichs} \\
-    Copenhagen, Denmark \\
-    \small \href{tel:+4581403148}{ \raisebox{-0.1\height}\faPhone\ \underline{(+45) 81403148} ~} \href{mailto:dem16216syh@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{dem16216syh@gmail.com}} ~ 
-    \href{https://linkedin.com/in/jeppe-h-1710a6a6}{\raisebox{-0.2\height}\faLinkedin\ \underline{jeppe-h-1710a6a6}}  ~
-    \href{https://github.com/s163555}{\raisebox{-0.2\height}\faGithub\ \underline{s163555}} ~
+    {\LARGE \scshape \firstname~\lastname} \\
+    \address \\
+    \small \href{tel:\phoneno}{ \raisebox{-0.1\height}\faPhone\ \underline{\phonenoprint} ~} \href{mailto:\email}{\raisebox{-0.2\height}\faEnvelope\  \underline{\email}} ~ 
+    \href{https://linkedin.com/in/\linkedin}{\raisebox{-0.2\height}\faLinkedin\ \underline{\linkedin}}  ~
+    \href{https://github.com/\github}{\raisebox{-0.2\height}\faGithub\ \underline{\github}} ~
     \vspace{-5pt}
 \end{center}
 

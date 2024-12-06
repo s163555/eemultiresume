@@ -27,10 +27,24 @@
   \fi
 \fi
 
-\ifnum\conditionmacro=1 \flavor{hw} \fi
-\ifnum\conditionmacro=2 \flavor{sw} \fi
-\ifnum\conditionmacro=3 \flavor{ic} \fi
-% \ifnum\conditionmacro=4 \flavor{test} \fi
+\ifluatex
+  \directlua{
+    tex.sprint("\\global\\def\\conditionmacro{" .. (os.getenv("CONDITION") or "0") .. "}")
+  }
+\else
+  \global\def\conditionmacro{0} % Fallback if not using LuaLaTeX
+\fi
+
+% Set the flavor based on the conditionmacro
+\ifnum\conditionmacro=1
+  \def\flavor{hw}
+\fi
+\ifnum\conditionmacro=2
+  \def\flavor{sw}
+\fi
+\ifnum\conditionmacro=3
+  \def\flavor{ic}
+\fi
 
 
 \RequirePackage{graphicx}
@@ -45,7 +59,6 @@
 
 
 \RequirePackage[nohead,nofoot]{geometry}
-\RequirePackage{bookmark}
 \RequirePackage{relsize}
 \RequirePackage[dvipsnames,svgnames]{xcolor}
 \RequirePackage{tikz}
@@ -99,10 +112,10 @@
 % Siunitx mlmodern fix
 \usepackage{siunitx}
 \sisetup{%
-	inter-unit-product = \ensuremath,
-	prefix-mode = combine-exponent,
-	drop-zero-decimal,
-	%range-units=single,
+  inter-unit-product = \ensuremath,
+  prefix-mode = combine-exponent,
+  drop-zero-decimal,
+  %range-units=single,
 }
 \let\oldtextmu\textmu
 \renewcommand{\textmu}{{\fontencoding{TS1}\fontfamily{mlmr}\selectfont\oldtextmu}}
