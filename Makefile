@@ -31,14 +31,22 @@ $(OUTPUT_DIR):
 # Run checks on output
 .PHONY: check
 check:
-	@echo "Running checks..."
+	@echo "Running checks for all flavors..."
 	# Ensure the main LaTeX file exists
 	@if [ ! -f $(MAIN_FILE).tex ]; then \
 		echo "Error: $(MAIN_FILE).tex not found!"; \
 		exit 1; \
 	fi
-	# Test build of the default flavor (e.g., hw)
-	$(LUALATEX) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-check "\def\Flavor{test} \input{$(MAIN_FILE).tex}"
+	# Test build for each flavor
+	@for flavor in $(FLAVORS); do \
+		echo "Testing flavor: $$flavor"; \
+		$(LUALATEX) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$$flavor "\def\Flavor{$$flavor} \input{$(MAIN_FILE).tex}"; \
+		if [ $$? -ne 0 ]; then \
+			echo "Error: Build failed for flavor $$flavor"; \
+			exit 1; \
+		fi; \
+	done
+	@echo "All flavors built successfully!"
 
 
 # Clean up auxiliary files
