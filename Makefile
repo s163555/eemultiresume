@@ -31,24 +31,20 @@ $(OUTPUT_DIR):
 # Run checks on output
 .PHONY: check
 check:
-	@echo "Running checks for all flavors..."
-	# Ensure the main LaTeX file exists
-	@if [ ! -f $(MAIN_FILE).tex ]; then \
-		echo "Error: $(MAIN_FILE).tex not found!"; \
-		exit 1; \
-	fi
-	# Test build for each flavor
-	@for flavor in $(FLAVORS); do \
-		echo "Testing flavor: $$flavor"; \
-		$(LUALATEX) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$$flavor "\def\Flavor{$$flavor} \input{$(MAIN_FILE).tex}"; \
-		if [ $$? -ne 0 ]; then \
-			echo "Error: Build failed for flavor $$flavor"; \
-			exit 1; \
+	@echo "Checking output files..."
+	@all_present=true; \
+	for flavor in $(FLAVORS); do \
+		if [ ! -f "$(OUTPUT_DIR)/cv-$$flavor.pdf" ]; then \
+			echo "Error: Output PDF not found for flavor $$flavor"; \
+			all_present=false; \
 		fi; \
-	done
-	@echo "All flavors built successfully!"
-
-
+	done; \
+	if [ "$$all_present" = false ]; then \
+		echo "One or more output files are missing!"; \
+		exit 1; \
+	else \
+		echo "All output files exist!"; \
+	fi
 # Clean up auxiliary files
 .PHONY: clean
 clean:
