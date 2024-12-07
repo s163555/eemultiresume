@@ -28,6 +28,19 @@ $(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex | $(OUTPUT_DIR)
 $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
 
+# Run checks on output
+.PHONY: check
+check:
+	@echo "Running checks..."
+	# Ensure the main LaTeX file exists
+	@if [ ! -f $(MAIN_FILE).tex ]; then \
+		echo "Error: $(MAIN_FILE).tex not found!"; \
+		exit 1; \
+	fi
+	# Test build of the default flavor (e.g., hw)
+	$(LUALATEX) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-check "\def\Flavor{test} \input{$(MAIN_FILE).tex}"
+
+
 # Clean up auxiliary files
 .PHONY: clean
 clean:
