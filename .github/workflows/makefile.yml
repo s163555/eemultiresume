@@ -1,0 +1,47 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - uses: actions/checkout@v4
+
+    # Step 2: Set up TeXLive (LaTeX distribution)
+    - name: Set up TeXLive
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          texlive-base \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-xetex \
+          texlive-bibtex-extra \
+          texlive-luatex \
+          latexmk
+
+    # Step 3: Ensure output directory exists
+    - name: Prepare build environment
+      run: mkdir -p output
+
+    # Step 4: Build the LaTeX files using the Makefile
+    - name: Build LaTeX documents
+      run: make
+
+    # Optional: Run additional checks if you have a 'check' target
+    - name: Run check
+      if: success()
+      run: make check
+
+    # Optional: Clean up build artifacts if needed
+    - name: Clean up
+      if: always()
+      run: make clean
