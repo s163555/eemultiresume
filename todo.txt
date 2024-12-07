@@ -1,4 +1,3 @@
 ToDo:
 -- Test of remote tracking
--- Create global variables and wrapping of text fields
--- Create make system for building all flavors
+-- Configure automated build system
