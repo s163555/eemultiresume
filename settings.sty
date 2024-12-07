@@ -27,25 +27,7 @@
   \fi
 \fi
 
-\ifluatex
-  \directlua{
-    tex.sprint("\\global\\def\\conditionmacro{" .. (os.getenv("CONDITION") or "0") .. "}")
-  }
-\else
-  \global\def\conditionmacro{0} % Fallback if not using LuaLaTeX
-\fi
-
-% Set the flavor based on the conditionmacro
-\ifnum\conditionmacro=1
-  \def\flavor{hw}
-\fi
-\ifnum\conditionmacro=2
-  \def\flavor{sw}
-\fi
-\ifnum\conditionmacro=3
-  \def\flavor{ic}
-\fi
-
+\flavor{\Flavor}
 
 \RequirePackage{graphicx}
 %\RequirePackage[hyphens]{url}
