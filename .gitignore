@@ -311,3 +311,5 @@ TSWLatexianTemp*
 
 # latexmk dependency files
 *.d
+# latexmk artifacts
+*-SAVE-ERROR
