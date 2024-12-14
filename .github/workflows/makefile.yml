@@ -29,7 +29,8 @@ jobs:
           texlive-bibtex-extra \
           texlive-luatex \
           texlive-science \
-          latexmk
+          latexmk \
+          biber
 
     - name: Prepare build environment
       run: mkdir -p output
