@@ -27,6 +27,7 @@ jobs:
           texlive-xetex \
           texlive-bibtex-extra \
           texlive-luatex \
+          texlive-science \
           latexmk
 
     # Step 3: Ensure output directory exists
