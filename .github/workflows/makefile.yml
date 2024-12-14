@@ -59,26 +59,40 @@ jobs:
         name: output-pdfs
         path: output
 
-    - name: Fetch Commit Details
+    - name: Fetch Latest Release Tag
+      id: latest_release
+      run: |
+        # Get the latest release tag
+        LATEST_RELEASE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+        
+        echo "Latest release tag: $LATEST_RELEASE"
+        echo "latest_release=$LATEST_RELEASE" >> $GITHUB_ENV
+
+    - name: Fetch Commit Deltas
       id: fetch_commits
       run: |
-        # Fetch the latest commits using GitHub REST API
-        curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits > commits.json
+        # Get commits since the latest release
+        if [ -z "${{ env.latest_release }}" ] || [ "${{ env.latest_release }}" = "null" ]; then
+          # If no release exists, include all commits
+          COMMITS=$(git log --oneline HEAD)
+        else
+          # Get commits since the last release
+          COMMITS=$(git log --oneline ${{ env.latest_release }}..HEAD)
+        fi
 
-        # Extract the commit messages
-        COMMIT_MESSAGES=$(jq -r '.[].commit.message' commits.json | head -n 10 | sed ':a;N;$!ba;s/\n/\\n/g')
-        echo "Commit Messages: $COMMIT_MESSAGES"
-
-        # Write to a temporary file for environment variable handling
-        echo "commit_messages=$COMMIT_MESSAGES" >> $GITHUB_ENV
+        echo "Commit Deltas:"
+        echo "$COMMITS"
+        echo "commit_deltas=$COMMITS" >> $GITHUB_ENV
 
     - name: Generate Release Notes
       id: generate_notes
       run: |
         echo "### Release Notes" > release_notes.txt
         echo "The following changes are included in this release:" >> release_notes.txt
-        echo "${{ env.commit_messages }}" >> release_notes.txt
+
+        # Format commit deltas as bullet points
+        echo "${{ env.commit_deltas }}" | sed 's/^/- /' >> release_notes.txt
 
         # Append the release notes into GITHUB_ENV correctly
         {
@@ -86,6 +100,7 @@ jobs:
           cat release_notes.txt
           echo "EOF"
         } >> $GITHUB_ENV
+
 
     - name: Create Release
       uses: ncipollo/release-action@v1
