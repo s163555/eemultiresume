@@ -45,10 +45,16 @@ check:
 	else \
 		echo "All output files exist!"; \
 	fi
-# Clean up auxiliary files
+
+# Clean up auxiliary files (keep PDFs)
+.PHONY: clean_aux
+clean_aux:
+	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav
+
+# Clean up all files (including PDFs)
 .PHONY: clean
-clean:
-	rm -rf $(OUTPUT_DIR)/*.pdf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)
+clean: clean_aux
+	rm -rf $(OUTPUT_DIR)/*.pdf
 
 # Full rebuild
 .PHONY: rebuild
