@@ -246,6 +246,7 @@ pythontex-files-*/
 
 # xmpincl
 *.xmpi
+*.xmpdata
 
 # xindy
 *.xdy
@@ -301,7 +302,7 @@ TSWLatexianTemp*
 *.xwm
 
 # outputs
-./output/*
+*.pdf
 
 # REVTeX puts footnotes in the bibliography by default, unless the nofootinbib
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
