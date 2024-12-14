@@ -1,8 +1,11 @@
 # Main LaTeX file (without .tex extension)
 MAIN_FILE = main
 
-# Output directory
+# Output directory for PDF and auxiliary files
 OUTPUT_DIR = output
+
+# Dependency directory
+DEPS_DIR = $(OUTPUT_DIR)/deps
 
 # Flavors to build
 FLAVORS = hw sw ic
@@ -11,14 +14,12 @@ FLAVORS = hw sw ic
 DEFAULT_COMPILER = latexmk
 COMPILER ?= $(DEFAULT_COMPILER)
 
-# Compiler flags for each compiler
-ifeq ($(COMPILER),latexmk)
-	COMPILER_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error -verbose -outdir=$(OUTPUT_DIR)
-else ifeq ($(COMPILER),lualatex)
-	COMPILER_FLAGS = -interaction=nonstopmode -halt-on-error
-else
-	$(error Unsupported compiler: $(COMPILER))
-endif
+# Compiler flags for latexmk
+LATEXMK_FLAGS = -pdf -pdflua -interaction=nonstopmode -halt-on-error -use-make \
+                -output-directory=$(OUTPUT_DIR)
+
+# Compiler flags for lualatex
+LUALATEX_FLAGS = -interaction=nonstopmode -halt-on-error
 
 # Default target to build all flavors
 .PHONY: all
@@ -28,20 +29,30 @@ all: $(FLAVORS)
 .PHONY: $(FLAVORS)
 $(FLAVORS): %: $(OUTPUT_DIR)/cv-%.pdf
 
-# Rule to generate PDF for each flavor using a wrapper file
-$(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex | $(OUTPUT_DIR)
+# Rule to generate PDF for each flavor
+$(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex | $(OUTPUT_DIR) $(DEPS_DIR)
 	@echo "Building flavor: $*"
-	@echo "\\def\\Flavor{$*} \\input{$(MAIN_FILE).tex}" > $(OUTPUT_DIR)/temp-$*.tex
 ifeq ($(COMPILER),latexmk)
-	$(COMPILER) $(COMPILER_FLAGS) -jobname=cv-$* $(OUTPUT_DIR)/temp-$*.tex
-	rm $(OUTPUT_DIR)/temp-$*.tex
+	$(COMPILER) $(LATEXMK_FLAGS) \
+		-jobname=cv-$* \
+		-deps-out=$(DEPS_DIR)/cv-$*.d \
+		-usepretex="\def\Flavor{$*}" $(MAIN_FILE).tex
 else ifeq ($(COMPILER),lualatex)
-	$(COMPILER) $(COMPILER_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
+	$(COMPILER) $(LUALATEX_FLAGS) \
+		-jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
 endif
 
-# Ensure output directory exists
+# Include dependency files for latexmk
+ifeq ($(COMPILER),latexmk)
+-include $(wildcard $(DEPS_DIR)/*.d)
+endif
+
+# Ensure output and dependency directories exist
 $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
+
+$(DEPS_DIR):
+	mkdir -p $(DEPS_DIR)
 
 # Run checks on output
 .PHONY: check
@@ -64,7 +75,7 @@ check:
 # Clean up auxiliary files (keep PDFs)
 .PHONY: clean_aux
 clean_aux:
-	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav $(OUTPUT_DIR)/*.xmpdata $(OUTPUT_DIR)/*.fls $(OUTPUT_DIR)/*.fdb_latexmk $(OUTPUT_DIR)/*.xmpi $(OUTPUT_DIR)/temp-*.tex
+	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav $(OUTPUT_DIR)/*.xmpdata $(OUTPUT_DIR)/*.fls $(OUTPUT_DIR)/*.fdb_latexmk $(OUTPUT_DIR)/*.xmpi $(DEPS_DIR)
 
 # Clean up all files (including PDFs)
 .PHONY: clean
