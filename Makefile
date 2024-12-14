@@ -64,7 +64,7 @@ check:
 # Clean up auxiliary files (keep PDFs)
 .PHONY: clean_aux
 clean_aux:
-	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav $(OUTPUT_DIR)/*.xmpdata $(OUTPUT_DIR)/*.fls $(OUTPUT_DIR)/*.fdb_latexmk $(OUTPUT_DIR)/*.xmpi 
+	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav $(OUTPUT_DIR)/*.xmpdata $(OUTPUT_DIR)/*.fls $(OUTPUT_DIR)/*.fdb_latexmk $(OUTPUT_DIR)/*.xmpi $(OUTPUT_DIR)/temp-*.tex
 
 # Clean up all files (including PDFs)
 .PHONY: clean
