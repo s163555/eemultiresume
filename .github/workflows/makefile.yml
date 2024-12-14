@@ -38,12 +38,34 @@ jobs:
     - name: Build LaTeX documents
       run: make
 
-    # Optional: Run additional checks if you have a 'check' target
-    - name: Run check
-      if: success()
-      run: make check
+    # Step 5: Upload output PDFs as artifacts
+    - name: Upload PDFs
+      uses: actions/upload-artifact@v3
+      with:
+        name: output-pdfs
+        path: output/*.pdf
 
-    # Optional: Clean up build artifacts if needed
-    - name: Clean up
-      if: always()
-      run: make clean
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    # Step 1: Check out the repository
+    - uses: actions/checkout@v4
+
+    # Step 2: Download artifacts from the build job
+    - name: Download PDFs
+      uses: actions/download-artifact@v3
+      with:
+        name: output-pdfs
+        path: output
+
+    # Step 3: Create a GitHub Release and attach the PDFs
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: output/*.pdf
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.run_number }}
+        name: Release ${{ github.run_number }}
+        body: |
+          This release contains the PDFs generated from the latest commit.
