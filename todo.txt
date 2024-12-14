@@ -1,28 +1,3 @@
 ToDo:
 -- Test of remote tracking
--- Configure automated build system
--- Make check rebuild command:
-.PHONY: check
-check:
-	@echo "Running checks for all flavors..."
-	# Ensure the main LaTeX file exists
-	@if [ ! -f $(MAIN_FILE).tex ]; then \
-		echo "Error: $(MAIN_FILE).tex not found!"; \
-		exit 1; \
-	fi
-	# Test build for each flavor
-	@for flavor in $(FLAVORS); do \
-		echo "Testing flavor: $$flavor"; \
-		cmd="$(COMPILER) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$$flavor \"\\def\\Flavor{$$flavor} \\input{$(MAIN_FILE).tex}\""; \
-		echo "Running: $$cmd"; \
-		eval $$cmd; \
-		if [ $$? -ne 0 ]; then \
-			echo "Error: Build failed for flavor $$flavor"; \
-			exit 1; \
-		fi; \
-		if [ ! -f "$(OUTPUT_DIR)/cv-$$flavor.pdf" ]; then \
-			echo "Error: Output PDF not found for flavor $$flavor"; \
-			exit 1; \
-		fi; \
-	done
-	@echo "All flavors built successfully!"
+-- Check commit message generation
