@@ -51,42 +51,44 @@
 \RequirePackage[final]{microtype}
 
 % If you're not a researcher nor an academic, you probably don't need biblatex; delete this line.
-%\RequirePackage[bibstyle=apa6,sorting=ymdnt,uniquename=init,defernumbers=true]{biblatex}
+\RequirePackage[backend=biber,sorting=ymdnt,bibstyle=ieee,uniquename=init,defernumbers=true]{biblatex}
+
 \RequirePackage{csquotes}
 %% Added 17 Jan 2018 from https://tex.stackexchange.com/a/140641/226 and https://tex.stackexchange.com/a/46879/226
-%\DeclareSortingTemplate{ymdnt}{
-%  \sort{
-%    \field{presort}
-%  }
-%  \sort[final]{
-%    \field{sortkey}
-%  }
-%  \sort[direction=descending]{
-%    \field[strside=left,strwidth=4]{sortyear}
-%    \field[strside=left,strwidth=4]{year}
-%    \literal{9999}
-%  }
-%  \sort[direction=descending]{
-%    \field[padside=left,padwidth=2,padchar=0]{month}
-%    \literal{00}
-%  }
-%  \sort[direction=descending]{
-%    \field[padside=left,padwidth=2,padchar=0]{day}
-%    \literal{00}
-%  }
-%  \sort{
-%    \field{sortname}
-%    \field{author}
-%    \field{editor}
-%    \field{translator}
-%    \field{sorttitle}
-%    \field{title}
-%  }
-%  \sort{
-%    \field{sorttitle}
-%    \field{title}
-%  }
-%}
+\DeclareSortingTemplate{ymdnt}{
+  \sort{
+    \field{presort}
+  }
+  \sort[final]{
+    \field{sortkey}
+  }
+  \sort[direction=descending]{
+    \field[strside=left,strwidth=4]{sortyear}
+    \field[strside=left,strwidth=4]{year}
+    \literal{9999}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{month}
+    \literal{00}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{day}
+    \literal{00}
+  }
+  \sort{
+    \field{sortname}
+    \field{author}
+    \field{editor}
+    \field{translator}
+    \field{sorttitle}
+    \field{title}
+  }
+  \sort{
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
 % Siunitx mlmodern fix
 \usepackage{siunitx}
 \sisetup{%
@@ -104,19 +106,19 @@
    \node[shape=circle,text=white,fill=MarkerColour!80!black,font=\sffamily\scriptsize\bfseries,inner sep=1pt,text height=1.35ex,minimum width=1.5em,text centered] (char) {#1};}}
    
 \newcounter{bibitem}
-%\AtBeginBibliography{\setcounter{bibitem}{1}}
-%\AtEveryBibitem{\makebox[2.5em][l]{\circled{\thebibitem}\stepcounter{bibitem}}}
+\AtBeginBibliography{\setcounter{bibitem}{1}}
+\AtEveryBibitem{\makebox[2.5em][l]{\circled{\thebibitem}\stepcounter{bibitem}}}
 
 % \renewcommand{\bibfont}{\small}
-%\setlength{\bibitemsep}{1.5ex}
-%\setlength{\bibhang}{2.5em}
-%\RequirePackage{xpatch}
-%\xpretofieldformat{doi}
-%  {\textcolor{MarkerColour!80!black}{\scriptsize\faLink}}
-%  {}{}
-%\xpretofieldformat{url}
-%  {\textcolor{MarkerColour!80!black}{\scriptsize\faLink}}
-%  {}{}
+\setlength{\bibitemsep}{1.5ex}
+\setlength{\bibhang}{2.5em}
+\RequirePackage{xpatch}
+\xpretofieldformat{doi}
+  {\textcolor{MarkerColour!80!black}{\scriptsize\faLink}}
+  {}{}
+\xpretofieldformat{url}
+  {\textcolor{MarkerColour!80!black}{\scriptsize\faLink}}
+  {}{}
 
 \headerscale{1}
 %\setlength{\headerspace}{6pt}
@@ -136,7 +138,7 @@
   \vspace\rubricspace%
 }
 
-\subrubricfont{\large\bfseries\sffamily}
+\subrubricfont{\large\bfseries}
 \subrubricalignment{l}
 
 \newcommand{\makefield}[2]{\makebox[1.5em]{\color{MarkerColour!80!black}#1} #2\hspace{2em}}
@@ -157,32 +159,37 @@
 
 \newcommand{\makerubrichead}[1]{\vskip\baselineskip\@@rubrichead{#1}}
 
-%\defbibheading{subbibliography}{\vskip\subrubricbeforespace{\@subrubricfont\hspace{3pt}#1}\par}
+\defbibheading{subbibliography}{\vskip\subrubricbeforespace{\@subrubricfont\hspace{3pt}#1}\par}
 
-%\defbibfilter{booksandchapters}{%
-%( type=book or type=incollection )
-%}
-
-\newcommand{\myname}[2]{%
-   \def\@mylastname{#1}%
-   \def\@myfirstname{#2}%
+\defbibfilter{booksandchapters}{%
+( type=book or type=incollection )
 }
 
-%\renewcommand*{\mkbibnamefamily}[1]{%
-%  \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\@mylastname}}
-%               and
-%               test {\ifdefstrequal{\namepartgiven}{\@myfirstname}}}
-%    {\textbf{#1}}%
-%    {#1}%
-%}
+\RequirePackage{pgffor}
+\newcommand{\mynames}[1]{\def\my@namelist{#1}}
+\newtoggle{boldname}
+\renewcommand*{\mkbibnamefamily}[1]{%
+  \global\togglefalse{boldname}%
+  \foreach \my@fname / \my@gname in \my@namelist {%
+    \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\my@fname}}
+                 and
+                 test {\ifdefstrequal{\namepartgiven}{\my@gname}}}
+      {\global\toggletrue{boldname}}{}%
+  }%
+  \iftoggle{boldname}{\textbf{#1}}{#1}%
+}
 
-%\renewcommand*{\mkbibnamegiven}[1]{%
-%  \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\@mylastname}}
-%               and
-%               test {\ifdefstrequal{\namepartgiven}{\@myfirstname}}}
-%    {\textbf{#1}}%
-%    {#1}%
-%}
+\renewcommand*{\mkbibnamegiven}[1]{%
+  \global\togglefalse{boldname}%
+  \foreach \my@fname / \my@gname in \my@namelist{%
+    \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\my@fname}}
+                 and
+                 test {\ifdefstrequal{\namepartgiven}{\my@gname}}}
+      {\global\toggletrue{boldname}\breakforeach}{}%
+  }%
+  \iftoggle{boldname}{\textbf{#1}}{#1}%
+}
+
 
 %\RequirePackage[colorlinks=true,allcolors=black,breaklinks=true]{hyperref}
 

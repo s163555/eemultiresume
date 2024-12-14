@@ -15,10 +15,10 @@
 \usepackage{settings}
 
 %% Only needed if you want a Publication List
-%\addbibresource{own-bib.bib}
+\addbibresource{main.bib}
 
 %% Specify your last name and first name (as given in the .bib) to automatically bold your own name in the publications list. One caveat: You need to write \bibnamedelima where there's a space in your name for this to work properly for now...
-\myname{\lastname}{\firstname}
+\mynames{\firstname\bibnamedelima \lastname}
 
 % Change the page margins if you want
 \geometry{left=1cm,right=1cm,top=1cm,bottom=0.5cm}
@@ -52,6 +52,8 @@
 \makerubric{projects}
 \makerubric{skills}
 \makerubric{misc}
+
+%\input{publications}
 
 %\makerubric{referee}
 % \input{referee-full}
