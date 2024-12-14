@@ -7,17 +7,15 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Grant write permissions to create a release
+  contents: write  # Needed for creating releases
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out the repository
     - uses: actions/checkout@v4
 
-    # Step 2: Set up TeXLive (LaTeX distribution)
     - name: Set up TeXLive
       run: |
         sudo apt-get update
@@ -33,19 +31,15 @@ jobs:
           texlive-science \
           latexmk
 
-    # Step 3: Ensure output directory exists
     - name: Prepare build environment
       run: mkdir -p output
 
-    # Step 4: Build the LaTeX files using the Makefile
     - name: Build LaTeX documents
       run: make
 
-    # Step 5: Clean auxiliary files
     - name: Clean auxiliary files
       run: make clean_aux
 
-    # Step 6: Upload output PDFs as artifacts
     - name: Upload PDFs
       uses: actions/upload-artifact@v3
       with:
@@ -55,18 +49,36 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
-    # Step 1: Check out the repository
     - uses: actions/checkout@v4
 
-    # Step 2: Download artifacts from the build job
     - name: Download PDFs
       uses: actions/download-artifact@v3
       with:
         name: output-pdfs
         path: output
 
-    # Step 3: Create a GitHub Release and attach the PDFs
+    - name: Fetch Commit Details
+      id: fetch_commits
+      run: |
+        # Fetch the latest commits using GitHub REST API
+        curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/commits > commits.json
+
+        # Extract the commit messages
+        COMMIT_MESSAGES=$(jq -r '.[].commit.message' commits.json | head -n 10)
+        echo "Commit Messages: $COMMIT_MESSAGES"
+        echo "commit_messages=$COMMIT_MESSAGES" >> $GITHUB_ENV
+
+    - name: Generate Release Notes
+      id: generate_notes
+      run: |
+        echo "### Release Notes" > release_notes.txt
+        echo "The following changes are included in this release:" >> release_notes.txt
+        echo "${{ env.commit_messages }}" >> release_notes.txt
+        echo "notes=$(cat release_notes.txt)" >> $GITHUB_ENV
+
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
@@ -74,5 +86,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.run_number }}
         name: Release ${{ github.run_number }}
-        body: |
-          This release contains the PDFs generated from the latest commit.
+        body: ${{ env.notes }}
