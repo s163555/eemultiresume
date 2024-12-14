@@ -75,18 +75,23 @@ jobs:
     - name: Fetch Commit Deltas
       id: fetch_commits
       run: |
-        # Get commits since the latest release
         if [ -z "${{ env.latest_release }}" ] || [ "${{ env.latest_release }}" = "null" ]; then
           # If no release exists, include all commits
           COMMITS=$(git log --oneline HEAD)
         else
           # Get commits since the last release
-          COMMITS=$(git log --oneline ${{ env.latest_release }}..HEAD)
+          COMMITS=$(git log --oneline "${{ env.latest_release }}..HEAD")
         fi
 
         echo "Commit Deltas:"
         echo "$COMMITS"
-        echo "commit_deltas=$COMMITS" >> $GITHUB_ENV
+
+        # Append the commit deltas to the environment using heredoc
+        {
+          echo "commit_deltas<<EOF"
+          echo "$COMMITS"
+          echo "EOF"
+        } >> $GITHUB_ENV
 
     - name: Generate Release Notes
       id: generate_notes
