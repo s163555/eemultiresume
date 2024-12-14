@@ -52,6 +52,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch the full history
+        fetch-tags: true  # Ensure tags are fetched
 
     - name: Download PDFs
       uses: actions/download-artifact@v3
