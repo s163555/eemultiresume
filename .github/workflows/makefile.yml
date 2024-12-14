@@ -41,7 +41,7 @@ jobs:
       run: make clean_aux
 
     - name: Upload PDFs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: output-pdfs
         path: output/*.pdf
@@ -57,7 +57,7 @@ jobs:
         fetch-tags: true  # Ensure tags are fetched
 
     - name: Download PDFs
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: output-pdfs
         path: output
