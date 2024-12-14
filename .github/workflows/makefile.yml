@@ -67,8 +67,10 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/commits > commits.json
 
         # Extract the commit messages
-        COMMIT_MESSAGES=$(jq -r '.[].commit.message' commits.json | head -n 10)
+        COMMIT_MESSAGES=$(jq -r '.[].commit.message' commits.json | head -n 10 | sed ':a;N;$!ba;s/\n/\\n/g')
         echo "Commit Messages: $COMMIT_MESSAGES"
+
+        # Write to a temporary file for environment variable handling
         echo "commit_messages=$COMMIT_MESSAGES" >> $GITHUB_ENV
 
     - name: Generate Release Notes
