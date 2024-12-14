@@ -51,7 +51,7 @@
 \RequirePackage[final]{microtype}
 
 % If you're not a researcher nor an academic, you probably don't need biblatex; delete this line.
-\RequirePackage[backend=biber,sorting=ymdnt,bibstyle=ieee,uniquename=init,defernumbers=true]{biblatex}
+\RequirePackage[backend=biber,sorting=ymdnt,bibstyle=apa,uniquename=init,defernumbers=true]{biblatex}
 
 \RequirePackage{csquotes}
 %% Added 17 Jan 2018 from https://tex.stackexchange.com/a/140641/226 and https://tex.stackexchange.com/a/46879/226
@@ -166,22 +166,27 @@
 }
 
 \RequirePackage{pgffor}
-\newcommand{\mynames}[1]{\def\my@namelist{#1}}
+\newcommand{\mynames}[1]{%
+  \edef\my@namelist{#1}%
+}
 \newtoggle{boldname}
+
+% Redefine \mkbibnamefamily
 \renewcommand*{\mkbibnamefamily}[1]{%
   \global\togglefalse{boldname}%
   \foreach \my@fname / \my@gname in \my@namelist {%
     \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\my@fname}}
                  and
                  test {\ifdefstrequal{\namepartgiven}{\my@gname}}}
-      {\global\toggletrue{boldname}}{}%
+      {\global\toggletrue{boldname}\breakforeach}{}%
   }%
   \iftoggle{boldname}{\textbf{#1}}{#1}%
 }
 
+% Redefine \mkbibnamegiven
 \renewcommand*{\mkbibnamegiven}[1]{%
   \global\togglefalse{boldname}%
-  \foreach \my@fname / \my@gname in \my@namelist{%
+  \foreach \my@fname / \my@gname in \my@namelist {%
     \ifboolexpr{ test {\ifdefstrequal{\namepartfamily}{\my@fname}}
                  and
                  test {\ifdefstrequal{\namepartgiven}{\my@gname}}}

@@ -77,14 +77,19 @@ check:
 		echo "All output files exist!"; \
 	fi
 
+# Clean up biber-related files
+.PHONY: clean_biber
+clean_biber:
+	rm -rf $(OUTPUT_DIR)/*.bcf $(OUTPUT_DIR)/*.bbl $(OUTPUT_DIR)/*.blg $(OUTPUT_DIR)/*.run.xml
+
 # Clean up auxiliary files (keep PDFs)
 .PHONY: clean_aux
 clean_aux:
 	rm -rf $(OUTPUT_DIR)/*.log $(OUTPUT_DIR)/*.aux $(OUTPUT_DIR)/*.out $(OUTPUT_DIR)/*.toc $(OUTPUT_DIR)/*.snm $(OUTPUT_DIR)/*.nav $(OUTPUT_DIR)/*.xmpdata $(OUTPUT_DIR)/*.fls $(OUTPUT_DIR)/*.fdb_latexmk $(OUTPUT_DIR)/*.xmpi $(DEPS_DIR)
 
-# Clean up all files (including PDFs)
+# Clean up all files (including PDFs and biber files)
 .PHONY: clean
-clean: clean_aux
+clean: clean_aux clean_biber
 	rm -rf $(OUTPUT_DIR)/*.pdf
 
 # Full rebuild
