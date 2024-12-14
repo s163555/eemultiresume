@@ -4,8 +4,11 @@ MAIN_FILE = main
 # Output directory for PDF and auxiliary files
 OUTPUT_DIR = output
 
-# Dependency directory
+# Dependency directory (only needed for latexmk)
 DEPS_DIR = $(OUTPUT_DIR)/deps
+
+# Bibliography file
+BIB_FILE = $(MAIN_FILE).bib
 
 # Flavors to build
 FLAVORS = hw sw ic
@@ -30,7 +33,7 @@ all: $(FLAVORS)
 $(FLAVORS): %: $(OUTPUT_DIR)/cv-%.pdf
 
 # Rule to generate PDF for each flavor
-$(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex | $(OUTPUT_DIR) $(DEPS_DIR)
+$(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex $(BIB_FILE) | $(OUTPUT_DIR) $(if $(filter latexmk,$(COMPILER)),$(DEPS_DIR))
 	@echo "Building flavor: $*"
 ifeq ($(COMPILER),latexmk)
 	$(COMPILER) $(LATEXMK_FLAGS) \
@@ -38,8 +41,9 @@ ifeq ($(COMPILER),latexmk)
 		-deps-out=$(DEPS_DIR)/cv-$*.d \
 		-usepretex="\def\Flavor{$*}" $(MAIN_FILE).tex
 else ifeq ($(COMPILER),lualatex)
-	$(COMPILER) $(LUALATEX_FLAGS) \
-		-jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
+	$(COMPILER) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
+	if [ -f $(OUTPUT_DIR)/cv-$*.bcf ]; then biber $(OUTPUT_DIR)/cv-$*; fi
+	$(COMPILER) $(LUALATEX_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
 endif
 
 # Include dependency files for latexmk
@@ -47,10 +51,11 @@ ifeq ($(COMPILER),latexmk)
 -include $(wildcard $(DEPS_DIR)/*.d)
 endif
 
-# Ensure output and dependency directories exist
+# Ensure output directory exists
 $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
 
+# Ensure dependency directory exists (only for latexmk)
 $(DEPS_DIR):
 	mkdir -p $(DEPS_DIR)
 
