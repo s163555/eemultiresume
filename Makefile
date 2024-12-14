@@ -13,7 +13,7 @@ COMPILER ?= $(DEFAULT_COMPILER)
 
 # Compiler flags for each compiler
 ifeq ($(COMPILER),latexmk)
-	COMPILER_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error -outdir=$(OUTPUT_DIR)
+	COMPILER_FLAGS = -lualatex -interaction=nonstopmode -halt-on-error -verbose -outdir=$(OUTPUT_DIR)
 else ifeq ($(COMPILER),lualatex)
 	COMPILER_FLAGS = -interaction=nonstopmode -halt-on-error
 else
@@ -34,10 +34,10 @@ $(OUTPUT_DIR)/cv-%.pdf: $(MAIN_FILE).tex | $(OUTPUT_DIR)
 	@echo "\\def\\Flavor{$*} \\input{$(MAIN_FILE).tex}" > $(OUTPUT_DIR)/temp-$*.tex
 ifeq ($(COMPILER),latexmk)
 	$(COMPILER) $(COMPILER_FLAGS) -jobname=cv-$* $(OUTPUT_DIR)/temp-$*.tex
-else
+	rm $(OUTPUT_DIR)/temp-$*.tex
+else ifeq ($(COMPILER),lualatex)
 	$(COMPILER) $(COMPILER_FLAGS) -jobname=$(OUTPUT_DIR)/cv-$* "\def\Flavor{$*} \input{$(MAIN_FILE).tex}"
 endif
-	rm $(OUTPUT_DIR)/temp-$*.tex
 
 # Ensure output directory exists
 $(OUTPUT_DIR):
