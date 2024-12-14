@@ -79,7 +79,13 @@ jobs:
         echo "### Release Notes" > release_notes.txt
         echo "The following changes are included in this release:" >> release_notes.txt
         echo "${{ env.commit_messages }}" >> release_notes.txt
-        echo "notes=$(cat release_notes.txt)" >> $GITHUB_ENV
+
+        # Append the release notes into GITHUB_ENV correctly
+        {
+          echo "notes<<EOF"
+          cat release_notes.txt
+          echo "EOF"
+        } >> $GITHUB_ENV
 
     - name: Create Release
       uses: ncipollo/release-action@v1
