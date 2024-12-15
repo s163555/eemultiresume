@@ -1,8 +1,8 @@
 \begin{filecontents}[force]{\jobname.xmpdata}
-\Title        {CV - Jeppe Hinrichs}
-\Author       {Jeppe Hinrichs}
-\Copyright    {Copyright \copyright\ 2024 Jeppe Hinrichs}
-\Keywords     {resume\sep cv \sep engineer \sep electronics \sep electrical}
+\Title        {CV - Aniara Lyn Lauron}
+\Author       {Aniara Lyn Lauron}
+\Copyright    {Copyright \copyright\ 2024 Aniara Lyn Lauron}
+\Keywords     {resume\sep cv \sep pharmacy \sep drug \sep pharmaceutical}
 \Subject      {Personal resume}
 \end{filecontents}
 
@@ -222,20 +222,20 @@
 \fi
 
 % Define dynamic adjustments
-\newcommand{\description}{}
-\RequirePackage[extreme]{savetrees}
+%\newcommand{\description}{}
+%\RequirePackage[extreme]{savetrees}
 
 \newlength{\myresumeheight}
 \newlength{\targetheight}
 \setlength{\targetheight}{\textheight} % Set the target to one page
 
-\newcommand{\dynamicspacing}{ % Renamed to avoid conflict
-    \ifdim\myresumeheight<0.8\targetheight
-        \linespread{1.2} % For lighter content, increase line spacing
-    \fi
-    \ifdim\myresumeheight>0.95\targetheight
-        \linespread{0.9} % For dense content, reduce line spacing
-        \setlength{\parskip}{0pt} % Reduce paragraph spacing
+\newcommand{\dynamicspacing}{
+    \ifdim\myresumeheight<0.95\targetheight
+        \linespread{1.2} % Slightly increase line spacing for lighter content
+        \setlength{\parskip}{6pt} % Add extra paragraph spacing
+    \else
+        \linespread{1} % Normal spacing for denser content
+        \setlength{\parskip}{0pt}
     \fi
 }
 

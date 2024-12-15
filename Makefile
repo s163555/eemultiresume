@@ -11,7 +11,7 @@ DEPS_DIR = $(OUTPUT_DIR)/deps
 BIB_FILE = $(MAIN_FILE).bib
 
 # Flavors to build
-FLAVORS = hw sw ic
+FLAVORS = yara
 
 # Default compiler (can be overridden with `make COMPILER=lualatex`)
 DEFAULT_COMPILER = latexmk
