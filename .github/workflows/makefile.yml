@@ -39,16 +39,16 @@ jobs:
     - name: Build LaTeX documents with CMake
       env:
         TEXINPUTS: "${{ github.workspace }}:"  # Add source directory to TEXINPUTS
-      run: cmake --build .
+      run: cmake --build build
 
     - name: Clean auxiliary files
-      run: cmake --build . --target clean_aux
+      run: cmake --build build --target clean_aux
 
     - name: Upload PDFs
       uses: actions/upload-artifact@v4
       with:
         name: output-pdfs
-        path: output/*.pdf
+        path: build/output/*.pdf
 
   release:
     needs: build
