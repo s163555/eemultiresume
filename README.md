@@ -1,31 +1,83 @@
-<h1 align="center"> CV-Template</h1>
+# CurVeResume Project
+This project builds LaTeX-based resumes using either `latexmk` or `lualatex` through CMake. The build system is designed to handle different resume "flavors" (e.g., `hw`, `sw`, `ic`) and supports out-of-source builds for cleanliness.
 
-<p align="center">
-  CV template written in LaTeX, best for scholarship/job/study-programme application, created with researchers in mind.
-</p>
+---
 
-## What is CV-Template?
+## Prerequisites
+To build this project, you need the following tools installed:
 
-**CV-Template** is LaTeX template for a **CV(Curriculum Vitae)**, **Résumé** or **Cover Letter** inspired by [CurVe CV](https://www.overleaf.com/latex/templates/a-customised-curve-cv/mvmbhkwsnmwv). It is easy to customize your own template, especially since it is really written by a clean, semantic markup.
+- **CMake** (version 3.10 or later)
+- **TeXLive** or similar LaTeX distribution with the following packages:
+  - `latexmk`
+  - `biber` (optional for bibliography processing)
+  - `lualatex`
+  - `texlive-latex-recommended`, `texlive-latex-extra`, `texlive-fonts-recommended`
+- A working `git` installation
 
+---
 
-## DISCLAIMER!
+## Cloning the Repository
+To get started, clone the repository using `git`:
 
-None of the data provided in this CV is supposed to be used as it is, please update every bit to your own data
-You are free to copy the project and modify it to create your own CV.
+```bash
+git clone https://github.com/s163555/eemultiresume.git
+cd eemultiresume
+```
 
-## Quick Start
-If you don't want any headache of installations/.... you have two options:
+## Building the Project
+### Configure the Project
+Use CMake to configure the build system. Perform the following steps in the terminal:
+```
+cmake -S . -B build -DCOMPILER=latexmk
+```
+- Replace latexmk with lualatex if you prefer to use lualatex directly.
+- This command configures the build system into a separate build/ directory to keep the source directory clean.
 
-* [**Use the template from Overleaf**](https://www.overleaf.com/latex/templates/a-customised-curve-cv/mvmbhkwsnmwv)
-* Or, upload all this files to a new Overleaf project, then start editing parts by providing your data
+### Build the LaTeX Documents
+Run the following command to build the project:
+```
+cmake --build build
+```
+This will:
+- Generate PDF outputs for all the specified "flavors" (e.g., hw, sw, ic).
+- Place the output PDFs into the build/output directory.
 
-## Credit
+### Cleaning Auxiliary Files
+To clean up generated auxiliary files (logs, temporary outputs, etc.), run:
+```
+cmake --build build --target clean_aux
+```
 
-[**LaTeX**](https://www.latex-project.org) is a fantastic typesetting program that a lot of people use these days, especially the math and computer science people in academia.
+### Cleaning All Generated Files
+To clean all generated files, including the final PDFs, use:
+```
+cmake --build build --target clean_all
+```
 
-[**LaTeX FontAwesome**](https://github.com/furl/latex-fontawesome) is bindings for FontAwesome icons to be used in XeLaTeX.
+### Rebuilding the Project
+To perform a full clean and rebuild:
+```
+cmake --build build --target rebuild
+```
 
-[**CurVe CV**](https://www.overleaf.com/latex/templates/a-customised-curve-cv/mvmbhkwsnmwv) is the default temlate(by LianTze Lim) I used to create this. 
+## Output
+After a successful build, the resulting PDF files will be located in: `build/output/`
+Each "flavor" of the resume will have its own PDF, such as:
+- cv-hw.pdf (for hardware-focused resume)
+- cv-sw.pdf (for software-focused resume)
+- cv-ic.pdf (for integrated circuits-focused resume)
 
-Good luck!
+# Contributing
+Contributions are welcome! Please follow these steps:
+- Fork the repository.
+- Create a new branch: git checkout -b feature/your-feature-name.
+- Make your changes and commit them.
+- Push to the branch: git push origin feature/your-feature-name.
+- Open a Pull Request.
+
+# License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+# Acknowledgments
+Thanks to the LaTeX and CMake communities for providing powerful tools to streamline document generation.
+Special thanks to John Collins for providing feedback about Latexmk and Make integration.
