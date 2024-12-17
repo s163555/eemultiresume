@@ -31,6 +31,7 @@ function(add_latex_flavor flavor)
         # Define the latexmk command as a single shell string
         set(latex_command
             "TEXINPUTS=${CMAKE_SOURCE_DIR}:.: \
+            BIBINPUTS=${CMAKE_SOURCE_DIR}:.: \
             ${COMPILER} ${LATEXMK_FLAGS} \
             -output-directory=${OUTPUT_DIR} \
             -jobname=cv-${flavor} \
