@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(LatexBuild)
+project(CurVeResume)
 
 # Variables
 set(MAIN_FILE "main")
