@@ -34,13 +34,19 @@ cmake -S . -B build -DCOMPILER=latexmk
 - This command configures the build system into a separate build/ directory to keep the source directory clean.
 
 ### Build the LaTeX Documents
-Run the following command to build the project:
+Run the following command to build all flavors:
 ```
 cmake --build build
 ```
 This will:
 - Generate PDF outputs for all the specified "flavors" (e.g., hw, sw, ic).
 - Place the output PDFs into the build/output directory.
+
+#### Build a single target
+Run the following command to build a single flavor:
+```
+cmake --build build --target flavor
+```
 
 ### Cleaning Auxiliary Files
 To clean up generated auxiliary files (logs, temporary outputs, etc.), run:

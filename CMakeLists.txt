@@ -70,10 +70,11 @@ function(add_latex_flavor flavor)
         message(FATAL_ERROR "Unknown COMPILER: ${COMPILER}. Supported values are 'latexmk' and 'lualatex'.")
     endif()
 
-
-
-    # Add a custom target for the flavor
+    # Create the full target name (cv-${flavor})
     add_custom_target(cv-${flavor} ALL DEPENDS ${output_pdf})
+
+    # Create a short alias target (e.g., hw, sw, ic)
+    add_custom_target(${flavor} DEPENDS cv-${flavor})
 endfunction()
 
 # Add targets for all flavors
