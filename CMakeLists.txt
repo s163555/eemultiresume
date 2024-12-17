@@ -9,7 +9,7 @@ set(BIB_FILE "${MAIN_FILE}.bib")
 set(FLAVORS "hw" "sw" "ic")
 set(DEFAULT_COMPILER "latexmk")
 set(COMPILER ${DEFAULT_COMPILER} CACHE STRING "Compiler to use (latexmk or lualatex)")
-set(LATEXMK_FLAGS "-pdf -pdflua -interaction=nonstopmode -halt-on-error -use-make")
+set(LATEXMK_FLAGS "-pdf -pdflua -interaction=nonstopmode -halt-on-error -use-make -include-directory=${CMAKE_SOURCE_DIR}")
 set(LUALATEX_FLAGS "-interaction=nonstopmode -halt-on-error")
 
 # Ensure output and dependency directories exist
