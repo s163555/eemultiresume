@@ -44,12 +44,10 @@
 *.vrb
 
 # Build directory for CMake
-output/
+build/
 CMakeCache.txt
-CMakeFiles/
 cmake_install.cmake
-Makefile
-*.dir/
+
 
 # Temporary files
 *~

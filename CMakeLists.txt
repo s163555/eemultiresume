@@ -4,8 +4,7 @@ project(CurVeResume)
 # Variables
 set(MAIN_FILE "main")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/output")
-set(DEPS_DIR "${OUTPUT_DIR}/deps")
-set(BIB_FILE "${MAIN_FILE}.bib")
+set(DEPS_DIR "${CMAKE_BINARY_DIR}/deps")
 set(FLAVORS "hw" "sw" "ic")
 set(DEFAULT_COMPILER "latexmk")
 set(COMPILER ${DEFAULT_COMPILER} CACHE STRING "Compiler to use (latexmk or lualatex)")
@@ -31,7 +30,8 @@ function(add_latex_flavor flavor)
     if(COMPILER STREQUAL "latexmk")
         # Define the latexmk command as a single shell string
         set(latex_command
-            "${COMPILER} ${LATEXMK_FLAGS} \
+            "TEXINPUTS=${CMAKE_SOURCE_DIR}:.: \
+            ${COMPILER} ${LATEXMK_FLAGS} \
             -output-directory=${OUTPUT_DIR} \
             -jobname=cv-${flavor} \
             -deps-out=${DEPS_DIR}/cv-${flavor}.d \
@@ -43,7 +43,9 @@ function(add_latex_flavor flavor)
             OUTPUT ${output_pdf}
             COMMAND echo "Running: ${latex_command}"
             COMMAND /bin/sh -c "${latex_command}"
-            DEPENDS ${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex ${CMAKE_SOURCE_DIR}/${BIB_FILE}
+            DEPENDS ${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex
+                    ${CMAKE_SOURCE_DIR}/${MAIN_FILE}.bib
+                    ${CMAKE_SOURCE_DIR}/settings.sty
             COMMENT "Building flavor: ${flavor} with ${COMPILER}"
         )
     elseif(COMPILER STREQUAL "lualatex")
