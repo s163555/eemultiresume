@@ -1,10 +1,10 @@
-name: Makefile CI
+name: CMake CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "*" ]  # Trigger on all branches
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]  # Run PRs targeting main
 
 permissions:
   contents: write  # Needed for creating releases
@@ -32,14 +32,15 @@ jobs:
           latexmk \
           biber
 
-    - name: Prepare build environment
-      run: mkdir -p output
+    - name: Configure CMake
+      run: |
+        cmake -S . -B build -DCOMPILER=latexmk
 
-    - name: Build LaTeX documents
-      run: make
+    - name: Build LaTeX documents with CMake
+      run: cmake --build build
 
     - name: Clean auxiliary files
-      run: make clean_aux
+      run: cmake --build build --target clean_aux
 
     - name: Upload PDFs
       uses: actions/upload-artifact@v4
@@ -49,6 +50,7 @@ jobs:
 
   release:
     needs: build
+    if: github.ref == 'refs/heads/main'  # Run only on the main branch
     runs-on: ubuntu-latest
 
     steps:
@@ -66,10 +68,9 @@ jobs:
     - name: Fetch Latest Release Tag
       id: latest_release
       run: |
-        # Get the latest release tag
         LATEST_RELEASE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
-        
+
         echo "Latest release tag: $LATEST_RELEASE"
         echo "latest_release=$LATEST_RELEASE" >> $GITHUB_ENV
 
@@ -77,17 +78,14 @@ jobs:
       id: fetch_commits
       run: |
         if [ -z "${{ env.latest_release }}" ] || [ "${{ env.latest_release }}" = "null" ]; then
-          # If no release exists, include all commits
           COMMITS=$(git log --oneline HEAD)
         else
-          # Get commits since the last release
           COMMITS=$(git log --oneline "${{ env.latest_release }}..HEAD")
         fi
 
         echo "Commit Deltas:"
         echo "$COMMITS"
 
-        # Append the commit deltas to the environment using heredoc
         {
           echo "commit_deltas<<EOF"
           echo "$COMMITS"
@@ -99,17 +97,13 @@ jobs:
       run: |
         echo "### Release Notes" > release_notes.txt
         echo "The following changes are included in this release:" >> release_notes.txt
-
-        # Format commit deltas as bullet points
         echo "${{ env.commit_deltas }}" | sed 's/^/- /' >> release_notes.txt
 
-        # Append the release notes into GITHUB_ENV correctly
         {
           echo "notes<<EOF"
           cat release_notes.txt
           echo "EOF"
         } >> $GITHUB_ENV
-
 
     - name: Create Release
       uses: ncipollo/release-action@v1
