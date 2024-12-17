@@ -37,6 +37,7 @@ jobs:
         cmake -S . -B build -DCOMPILER=latexmk
 
     - name: Build LaTeX documents with CMake
+      env: TEXINPUTS: "${{ github.workspace }}:"  # Add source directory to TEXINPUTS
       run: cmake --build build
 
     - name: Clean auxiliary files
