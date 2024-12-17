@@ -36,7 +36,7 @@ function(add_latex_flavor flavor)
             -jobname=cv-${flavor} \
             -deps-out=${DEPS_DIR}/cv-${flavor}.d \
             -usepretex=\\\"\\\\def\\\\Flavor{${flavor}}\\\" \
-            ${MAIN_FILE}.tex"
+            ${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex"
         )
         # Add the custom command
         add_custom_command(
