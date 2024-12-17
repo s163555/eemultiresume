@@ -43,7 +43,7 @@ function(add_latex_flavor flavor)
             OUTPUT ${output_pdf}
             COMMAND echo "Running: ${latex_command}"
             COMMAND /bin/sh -c "${latex_command}"
-            DEPENDS ${MAIN_FILE}.tex ${BIB_FILE}
+            DEPENDS ${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex ${CMAKE_SOURCE_DIR}/${BIB_FILE}
             COMMENT "Building flavor: ${flavor} with ${COMPILER}"
         )
     elseif(COMPILER STREQUAL "lualatex")
