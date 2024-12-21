@@ -146,7 +146,7 @@ jobs:
         name: Release ${{ github.run_number }}
         body: ${{ env.notes }}
 
-    generate-previews:
+  generate-previews:
     needs: release
     runs-on: ubuntu-latest
 
