@@ -1,0 +1,68 @@
+name: Generate Previews
+
+on:
+  workflow_run:
+    workflows:
+      - CMake CI  # Name of the triggering workflow
+    types:
+      - completed  # Trigger only when the workflow completes successfully
+
+permissions:
+  contents: write  # Needed to commit changes to the repository
+
+jobs:
+  generate-previews:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y poppler-utils
+
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: output-pdfs
+        path: build/output
+
+    - name: Generate PNG Previews
+      run: |
+        mkdir -p previews
+        for pdf in build/output/*.pdf; do
+          filename=$(basename "$pdf" .pdf)
+          pdftoppm -singlefile -png "$pdf" "previews/$filename"
+        done
+
+    - name: Update README.md with Previews
+      run: |
+        # Extract content before ### Preview section
+        sed -n "/### Preview/q;p" README.md > README.tmp
+
+        # Add the Preview section
+        echo "### Preview" >> README.tmp
+        echo "" >> README.tmp
+        echo "Below are previews of the generated PDFs:" >> README.tmp
+        echo "" >> README.tmp
+        for png in previews/*.png; do
+          filename=$(basename "$png")
+          echo "![](previews/$filename)" >> README.tmp
+        done
+
+        # Append everything after ### Preview section
+        sed -n "/### Preview/,\$p" README.md | tail -n +2 >> README.tmp
+
+        # Replace the original README.md
+        mv README.tmp README.md
+
+    - name: Commit and Push Previews and README.md
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add previews/*.png README.md
+        git commit -m "Update previews and README.md"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
