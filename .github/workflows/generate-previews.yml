@@ -46,10 +46,12 @@ jobs:
         echo "" >> README.tmp
         echo "Below are previews of the generated PDFs:" >> README.tmp
         echo "" >> README.tmp
+        echo "<div style=\"display: flex; flex-wrap: wrap; gap: 10px;\">" >> README.tmp
         for png in previews/*.png; do
           filename=$(basename "$png")
-          echo "![](previews/$filename)" >> README.tmp
+          echo "  <img src=\"previews/$filename\" alt=\"$filename\" style=\"width: 30%; min-width: 200px;\">" >> README.tmp
         done
+        echo "</div>" >> README.tmp
 
         # Append everything after ### Preview section
         sed -n "/### Preview/,\$p" README.md | tail -n +2 >> README.tmp
