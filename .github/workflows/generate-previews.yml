@@ -26,7 +26,12 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: output-pdfs
-        path: build-latexmk/output
+        path: build/output
+
+    - name: List Extracted Files
+      run: |
+        echo "Listing files in build/output:"
+        ls -R build/output
 
     - name: Generate PNG Previews
       run: |
