@@ -75,6 +75,14 @@ Each "flavor" of the resume will have its own PDF, such as:
 
 ### Preview
 
+Below are previews of the generated PDFs:
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="previews/cv-hw.png" alt="cv-hw.png" style="width: 30%; min-width: 200px;">
+  <img src="previews/cv-ic.png" alt="cv-ic.png" style="width: 30%; min-width: 200px;">
+  <img src="previews/cv-sw.png" alt="cv-sw.png" style="width: 30%; min-width: 200px;">
+</div>
+
 # Contributing
 Contributions are welcome! Please follow these steps:
 - Fork the repository.
