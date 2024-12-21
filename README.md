@@ -6,7 +6,7 @@ This project builds LaTeX-based resumes using either `latexmk` or `lualatex` thr
 ## Prerequisites
 To build this project, you need the following tools installed:
 
-- **CMake** (version 3.10 or later)
+- **CMake** (version 3.11 or later)
 - **TeXLive** or similar LaTeX distribution with the following packages:
   - `latexmk`
   - `biber` (optional for bibliography processing)
@@ -74,14 +74,6 @@ Each "flavor" of the resume will have its own PDF, such as:
 - cv-ic.pdf (for integrated circuits-focused resume)
 
 ### Preview
-
-Below are previews of the generated PDFs:
-
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="https://s163555.github.io/eemultiresume/cv-hw.png" alt="cv-hw" style="width: 30%; min-width: 200px;">
-  <img src="https://s163555.github.io/eemultiresume/cv-sw.png" alt="cv-sw" style="width: 30%; min-width: 200px;">
-  <img src="https://s163555.github.io/eemultiresume/cv-ic.png" alt="cv-ic" style="width: 30%; min-width: 200px;">
-</div>
 
 # Contributing
 Contributions are welcome! Please follow these steps:
