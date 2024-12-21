@@ -52,7 +52,6 @@ function(add_latex_flavor flavor)
         ${CMAKE_SOURCE_DIR}/publications.tex
         ${CMAKE_SOURCE_DIR}/referee.tex
         ${CMAKE_SOURCE_DIR}/referee-full.tex
-        ${CMAKE_SOURCE_DIR}/pdfa.xmpi
     )
 
     # Flavor-specific dependencies
