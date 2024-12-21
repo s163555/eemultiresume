@@ -22,6 +22,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y poppler-utils
 
+    - name: List Uploaded Files
+      run: |
+        echo "Listing files in build-latexmk/output:"
+        ls -R build-latexmk/output
+
     - name: Download Build Artifacts
       uses: actions/download-artifact@v4
       with:

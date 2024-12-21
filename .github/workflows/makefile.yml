@@ -44,6 +44,12 @@ jobs:
       with:
         name: output-pdfs
         path: build-latexmk/output/*.pdf
+        retention-days: 5
+
+    - name: List Uploaded Files
+      run: |
+        echo "Listing files in build-latexmk/output:"
+        ls -R build-latexmk/output
 
   build-lualatex:
     runs-on: ubuntu-latest
