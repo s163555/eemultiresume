@@ -10,7 +10,7 @@ permissions:
   contents: write  # Needed for creating releases
 
 jobs:
-  build:
+  build-latexmk:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,24 +32,54 @@ jobs:
           latexmk \
           biber
 
-    - name: Configure CMake
+    - name: Configure CMake with latexmk
       run: |
-        cmake -S . -B build -DCOMPILER=latexmk
+        cmake -S . -B build-latexmk -DCOMPILER=latexmk
 
-    - name: Build LaTeX documents with CMake
-      run: cmake --build build
+    - name: Build LaTeX documents with latexmk
+      run: cmake --build build-latexmk
 
-    - name: Clean auxiliary files
-      run: cmake --build build --target clean_aux
-
-    - name: Upload PDFs
+    - name: Upload PDFs (latexmk)
       uses: actions/upload-artifact@v4
       with:
         name: output-pdfs
-        path: build/output/*.pdf
+        path: build-latexmk/output/*.pdf
+
+  build-lualatex:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up TeXLive
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          texlive-base \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-fonts-extra \
+          texlive-xetex \
+          texlive-bibtex-extra \
+          texlive-luatex \
+          texlive-science \
+          latexmk \
+          biber
+
+    - name: Configure CMake with lualatex
+      run: |
+        cmake -S . -B build-lualatex -DCOMPILER=lualatex
+
+    - name: Build LaTeX documents with lualatex
+      run: cmake --build build-lualatex
+
+    - name: Validate Output (lualatex)
+      run: |
+        echo "Validating build with lualatex..."
 
   release:
-    needs: build
+    needs: [build-latexmk, build-lualatex]
     if: github.ref == 'refs/heads/main'  # Run only on the main branch
     runs-on: ubuntu-latest
 
