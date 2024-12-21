@@ -74,10 +74,6 @@ jobs:
     - name: Build LaTeX documents with lualatex
       run: cmake --build build-lualatex
 
-    - name: Validate Output (lualatex)
-      run: |
-        echo "Validating build with lualatex..."
-
   release:
     needs: [build-latexmk, build-lualatex]
     if: github.ref == 'refs/heads/main'  # Run only on the main branch

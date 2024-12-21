@@ -73,6 +73,8 @@ Each "flavor" of the resume will have its own PDF, such as:
 - cv-sw.pdf (for software-focused resume)
 - cv-ic.pdf (for integrated circuits-focused resume)
 
+### Preview
+
 # Contributing
 Contributions are welcome! Please follow these steps:
 - Fork the repository.
