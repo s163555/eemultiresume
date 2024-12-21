@@ -5,7 +5,12 @@ on:
     branches: [ "*" ]  # Trigger on all branches
   pull_request:
     branches: [ "main" ]  # Run PRs targeting main
-
+  workflow_dispatch:
+    inputs:
+      generate_previews:
+        description: "Generate previews"
+        required: true
+        default: "false"
 permissions:
   contents: write  # Needed for creating releases
 
@@ -148,6 +153,7 @@ jobs:
 
   generate-previews:
     needs: release
+    if: ${{ github.event.inputs.generate_previews == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
