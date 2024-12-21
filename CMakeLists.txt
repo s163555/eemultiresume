@@ -93,7 +93,7 @@ function(add_latex_flavor flavor)
             ${COMPILER} ${LUALATEX_FLAGS} \
             -output-directory=${OUTPUT_DIR} \
             -jobname=cv-${flavor} \
-            \"\\def\\Flavor{${flavor}} \\input{${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex}\""
+            \\\"\\\\def\\\\Flavor{${flavor}} \\\\input{${CMAKE_SOURCE_DIR}/${MAIN_FILE}.tex}\\\""
         )
     else()
         message(FATAL_ERROR "Unknown COMPILER: ${COMPILER}. Supported values are 'latexmk' and 'lualatex'.")
