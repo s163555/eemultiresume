@@ -146,7 +146,7 @@ jobs:
         name: Release ${{ github.run_number }}
         body: ${{ env.notes }}
 
-  generate-previews:
+    generate-previews:
     needs: release
     runs-on: ubuntu-latest
 
@@ -172,35 +172,10 @@ jobs:
           pdftoppm -singlefile -png "$pdf" "previews/$filename"
         done
 
-    - name: Update README.md with Previews
-      run: |
-        # Extract content before ### Preview section
-        sed -n "/### Preview/q;p" README.md > README.tmp
-
-        # Add the Preview section
-        echo "### Preview" >> README.tmp
-        echo "" >> README.tmp
-        echo "Below are previews of the generated PDFs:" >> README.tmp
-        echo "" >> README.tmp
-        echo "<div style=\"display: flex; flex-wrap: wrap; gap: 10px;\">" >> README.tmp
-        for png in previews/*.png; do
-          filename=$(basename "$png")
-          echo "  <img src=\"previews/$filename\" alt=\"$filename\" style=\"width: 30%; min-width: 200px;\">" >> README.tmp
-        done
-        echo "</div>" >> README.tmp
-
-        # Append everything after ### Preview section
-        sed -n "/### Preview/,\$p" README.md | tail -n +2 >> README.tmp
-
-        # Replace the original README.md
-        mv README.tmp README.md
-
-    - name: Commit and Push Previews and README.md
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add previews/*.png README.md
-        git commit -m "Update previews and README.md"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Deploy Previews to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.GITHUB_TOKEN }}
+        external_repository: ${{ github.repository }}
+        publish_branch: gh-pages
+        publish_dir: previews
