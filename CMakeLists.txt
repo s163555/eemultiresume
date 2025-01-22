@@ -50,8 +50,8 @@ function(add_latex_flavor flavor)
         ${CMAKE_SOURCE_DIR}/misc.tex
         ${CMAKE_SOURCE_DIR}/skills.tex
         ${CMAKE_SOURCE_DIR}/publications.tex
-        ${CMAKE_SOURCE_DIR}/referee.tex
-        ${CMAKE_SOURCE_DIR}/referee-full.tex
+        ${CMAKE_SOURCE_DIR}/references.tex
+        ${CMAKE_SOURCE_DIR}/references-full.tex
     )
 
     # Flavor-specific dependencies

@@ -1,3 +1,3 @@
 ToDo:
--- Test of remote tracking
--- Check commit message generation
+-- Fix indentation on references rubric
+-- Fix indentation on bibliography rubric
