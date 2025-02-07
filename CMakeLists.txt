@@ -122,7 +122,7 @@ add_custom_target(clean_aux
     COMMAND ${CMAKE_COMMAND} -E remove ${OUTPUT_DIR}/*.log ${OUTPUT_DIR}/*.aux ${OUTPUT_DIR}/*.out
                               ${OUTPUT_DIR}/*.toc ${OUTPUT_DIR}/*.snm ${OUTPUT_DIR}/*.nav
                               ${OUTPUT_DIR}/*.xmpdata ${OUTPUT_DIR}/*.fls ${OUTPUT_DIR}/*.fdb_latexmk
-                              ${OUTPUT_DIR}/*.xmpi ${DEPS_DIR}/*
+                              ${OUTPUT_DIR}/*.xmpi 
     COMMENT "Cleaning auxiliary files"
 )
 
@@ -132,10 +132,16 @@ add_custom_target(clean_biber
     COMMENT "Cleaning biber files"
 )
 
+# Clean dep files
+add_custom_target(clean_dep
+    COMMAND ${CMAKE_COMMAND} -E remove ${DEPS_DIR}/*
+    COMMENT "Cleaning dep files"
+)
+
 # Clean all files
 add_custom_target(clean_all
     COMMAND ${CMAKE_COMMAND} -E remove ${OUTPUT_DIR}/*.pdf
-    DEPENDS clean_aux clean_biber
+    DEPENDS clean_aux clean_biber clean_dep
     COMMENT "Cleaning all files"
 )
 
